@@ -1,2 +1,2 @@
 # InterspireEmailMarketerClient
-Java client for Interspire EMail Marketer API
+Java client for Interspire Email Marketer API
