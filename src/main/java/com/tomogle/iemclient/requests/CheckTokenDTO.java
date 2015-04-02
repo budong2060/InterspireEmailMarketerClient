@@ -1,4 +1,4 @@
-package com.tomogle.interspireemailmarketerclient.requests;
+package com.tomogle.iemclient.requests;
 
 import javax.xml.bind.annotation.XmlElement;
 

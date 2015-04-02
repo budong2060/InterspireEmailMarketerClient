@@ -1,4 +1,4 @@
-package com.tomogle.interspireemailmarketerclient.requests;
+package com.tomogle.iemclient.requests;
 
 /**
  * Represents the method we want to call in the IEM API.
