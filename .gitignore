@@ -13,6 +13,9 @@ hs_err_pid*
 
 target/
 
+# Real iem.properties
+iem.properties
+
 # IntelliJ project files
 .idea/
 *.iml

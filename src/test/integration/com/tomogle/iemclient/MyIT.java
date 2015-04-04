@@ -1,13 +1,29 @@
 package com.tomogle.iemclient;
 
+import com.tomogle.iemclient.requests.RequestCreationUtil;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static org.junit.Assert.fail;
+import java.util.Properties;
 
 public class MyIT {
 
+  private static final Properties properties = PropertyUtil.getTestProperties();;
+  private static IEMClient client;
+  private static String apiUsername;
+  private static String apiToken;
+
+
+  @BeforeClass
+  public static void setUpClass() {
+    final String apiUrl = properties.getProperty("iem.api.url");
+    apiUsername = properties.getProperty("iem.api.username");
+    apiToken = properties.getProperty("iem.api.token");
+    client = new IEMClient(apiUrl);
+  }
+
   @Test
-  public void test1() throws Exception {
-    System.out.println("Running IT");
+  public void testCheckToken() throws Exception {
+    client.checkToken(RequestCreationUtil.checkTokenDTO(apiUsername, apiToken));
   }
 }
