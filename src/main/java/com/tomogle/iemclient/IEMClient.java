@@ -4,14 +4,13 @@ import com.tomogle.iemclient.exception.ConnectionException;
 import com.tomogle.iemclient.exception.OperationFailedException;
 import com.tomogle.iemclient.exception.UnexpectedResponseCodeException;
 import com.tomogle.iemclient.requests.CheckTokenDTO;
+import com.tomogle.iemclient.requests.addsubscriber.AddSubscriberDTO;
 import com.tomogle.iemclient.response.ResponseDTO;
 import com.tomogle.iemclient.response.Status;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
-import org.glassfish.jersey.client.ClientResponse;
 
 import javax.ws.rs.InternalServerErrorException;
-import javax.ws.rs.ProcessingException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -58,6 +57,14 @@ public class IEMClient {
     } catch (InternalServerErrorException e) {
       throw new ConnectionException(e);
     }
+  }
+
+  public void addSubscriberToList(final AddSubscriberDTO requestBody) throws UnexpectedResponseCodeException, OperationFailedException {
+    Entity<AddSubscriberDTO> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
+    final Response response = webTarget.request().post(entity, Response.class);
+    checkResponseCode(response, OK_RESPONSE);
+    final ResponseDTO responseDTO = response.readEntity(ResponseDTO.class);
+    checkStatusIsSuccess(responseDTO);
   }
 
   private void checkStatusIsSuccess(final ResponseDTO responseDTO) throws OperationFailedException {

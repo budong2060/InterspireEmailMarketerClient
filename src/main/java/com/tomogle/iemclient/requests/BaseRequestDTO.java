@@ -9,7 +9,6 @@ public class BaseRequestDTO {
   private String usertoken;
   private RequestType requesttype;
   private RequestMethod requestmethod;
-  private String details;
 
   public BaseRequestDTO() {
   }
@@ -55,14 +54,5 @@ public class BaseRequestDTO {
 
   public void setRequestmethod(final RequestMethod requestmethod) {
     this.requestmethod = requestmethod;
-  }
-
-  @XmlElement(required = true)
-  public String getDetails() {
-    return details;
-  }
-
-  public void setDetails(final String details) {
-    this.details = details;
   }
 }
