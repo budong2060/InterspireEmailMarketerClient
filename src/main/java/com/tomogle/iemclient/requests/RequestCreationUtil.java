@@ -2,6 +2,8 @@ package com.tomogle.iemclient.requests;
 
 
 import com.tomogle.iemclient.requests.authentication.checktoken.CheckTokenDTO;
+import com.tomogle.iemclient.requests.lists.GetListsDTO;
+import com.tomogle.iemclient.requests.lists.GetListsDetailsDTO;
 import com.tomogle.iemclient.requests.stats.FetchStatsDTO;
 import com.tomogle.iemclient.requests.stats.FetchStatsDetailsDTO;
 import com.tomogle.iemclient.requests.subscribers.addsubscriber.AddSubscriberDTO;
@@ -31,5 +33,9 @@ public class RequestCreationUtil {
 
   public static FetchStatsDTO fetchStatsDTO(final String apiUsername, final String apiToken, final String statId, final String statsType) {
     return new FetchStatsDTO(apiUsername, apiToken, new FetchStatsDetailsDTO(statId, statsType));
+  }
+
+  public static GetListsDTO getListsRequest(final String apiUsername, final String apiToken, final int start, final int perPage) {
+    return new GetListsDTO(apiUsername, apiToken, new GetListsDetailsDTO(start, perPage));
   }
 }
