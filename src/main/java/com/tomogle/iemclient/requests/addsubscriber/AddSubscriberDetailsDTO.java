@@ -14,6 +14,7 @@ public class AddSubscriberDetailsDTO {
   private List<ItemDTO> customfields;
 
   public AddSubscriberDetailsDTO() {
+    super();
   }
 
   public AddSubscriberDetailsDTO(final String emailaddress, final String mailinglist, final Format format,

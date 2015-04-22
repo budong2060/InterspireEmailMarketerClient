@@ -8,5 +8,7 @@ package com.tomogle.iemclient.requests;
  */
 public enum RequestMethod {
   AddSubscriberToList,
-  xmlapitest
+  DeleteSubscriber,
+  xmlapitest,
+  GetLists
 }

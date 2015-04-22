@@ -8,5 +8,6 @@ package com.tomogle.iemclient.requests;
  */
 public enum RequestType {
   subscribers,
-  authentication
+  authentication,
+  lists
 }
