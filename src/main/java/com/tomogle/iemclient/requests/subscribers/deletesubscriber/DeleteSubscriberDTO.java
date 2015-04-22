@@ -1,4 +1,4 @@
-package com.tomogle.iemclient.requests.deletesubscriber;
+package com.tomogle.iemclient.requests.subscribers.deletesubscriber;
 
 import com.tomogle.iemclient.requests.BaseRequestDTO;
 import com.tomogle.iemclient.requests.RequestMethod;

@@ -3,10 +3,10 @@ package com.tomogle.iemclient;
 import com.tomogle.iemclient.exception.ConnectionException;
 import com.tomogle.iemclient.exception.OperationFailedException;
 import com.tomogle.iemclient.requests.RequestCreationUtil;
-import com.tomogle.iemclient.requests.addsubscriber.AddSubscriberDTO;
-import com.tomogle.iemclient.requests.addsubscriber.Confirmed;
-import com.tomogle.iemclient.requests.addsubscriber.Format;
-import com.tomogle.iemclient.requests.addsubscriber.ItemDTO;
+import com.tomogle.iemclient.requests.subscribers.addsubscriber.AddSubscriberDTO;
+import com.tomogle.iemclient.requests.subscribers.addsubscriber.Confirmed;
+import com.tomogle.iemclient.requests.subscribers.addsubscriber.Format;
+import com.tomogle.iemclient.requests.subscribers.addsubscriber.ItemDTO;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

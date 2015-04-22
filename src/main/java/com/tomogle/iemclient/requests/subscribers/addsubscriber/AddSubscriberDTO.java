@@ -1,4 +1,4 @@
-package com.tomogle.iemclient.requests.addsubscriber;
+package com.tomogle.iemclient.requests.subscribers.addsubscriber;
 
 import com.tomogle.iemclient.requests.BaseRequestDTO;
 import com.tomogle.iemclient.requests.RequestMethod;

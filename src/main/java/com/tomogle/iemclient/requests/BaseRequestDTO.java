@@ -3,6 +3,9 @@ package com.tomogle.iemclient.requests;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+/**
+ * The Base class for 'top-level' request DTOs
+ */
 @XmlRootElement(name = "xmlrequest")
 public class BaseRequestDTO {
   private String username;

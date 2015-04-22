@@ -10,5 +10,6 @@ public enum RequestMethod {
   AddSubscriberToList,
   DeleteSubscriber,
   xmlapitest,
-  GetLists
+  GetLists,
+  FetchStats
 }

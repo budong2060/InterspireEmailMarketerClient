@@ -1,4 +1,4 @@
-package com.tomogle.iemclient.requests.addsubscriber;
+package com.tomogle.iemclient.requests.subscribers.addsubscriber;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;

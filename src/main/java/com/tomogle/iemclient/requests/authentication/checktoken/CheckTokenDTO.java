@@ -1,4 +1,8 @@
-package com.tomogle.iemclient.requests;
+package com.tomogle.iemclient.requests.authentication.checktoken;
+
+import com.tomogle.iemclient.requests.BaseRequestDTO;
+import com.tomogle.iemclient.requests.RequestMethod;
+import com.tomogle.iemclient.requests.RequestType;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
