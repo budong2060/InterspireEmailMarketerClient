@@ -2,10 +2,18 @@ package com.tomogle.iemclient;
 
 import com.tomogle.iemclient.exception.ConnectionException;
 import com.tomogle.iemclient.exception.OperationFailedException;
+import com.tomogle.iemclient.exception.UnexpectedResponseBodyException;
 import com.tomogle.iemclient.exception.UnexpectedResponseCodeException;
-import com.tomogle.iemclient.requests.authentication.checktoken.CheckTokenDTO;
-import com.tomogle.iemclient.requests.subscribers.addsubscriber.AddSubscriberDTO;
-import com.tomogle.iemclient.response.ResponseDTO;
+import com.tomogle.iemclient.requests.authentication.checktoken.CheckTokenRequest;
+import com.tomogle.iemclient.requests.lists.GetListsRequest;
+import com.tomogle.iemclient.requests.lists.response.GetListsResponse;
+import com.tomogle.iemclient.requests.stats.FetchStatsRequest;
+import com.tomogle.iemclient.requests.subscribers.addbannedsubscriber.AddBannedSubscriberRequest;
+import com.tomogle.iemclient.requests.subscribers.addsubscribertolist.AddSubscriberRequest;
+import com.tomogle.iemclient.requests.subscribers.getsubscribers.GetSubscribersRequest;
+import com.tomogle.iemclient.requests.subscribers.getsubscribers.response.GetSubscribersResponse;
+import com.tomogle.iemclient.requests.subscribers.issubscriberonlist.IsSubscriberOnListRequest;
+import com.tomogle.iemclient.response.GenericResponse;
 import com.tomogle.iemclient.response.Status;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
@@ -17,6 +25,9 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.bind.JAXBException;
+
+import static com.tomogle.iemclient.Utils.fromXml;
 
 public class IEMClient {
 
@@ -47,34 +58,92 @@ public class IEMClient {
    * @param requestBody A data transfer object representing the XML request body.
    * @throws OperationFailedException Thrown if the server response indicates operation failure.
    */
-  public void checkToken(final CheckTokenDTO requestBody)
+  public void checkToken(final CheckTokenRequest requestBody)
       throws OperationFailedException, ConnectionException, UnexpectedResponseCodeException {
     try {
       final Response response = webTarget.request().post(Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE), Response.class);
       checkResponseCode(response, OK_RESPONSE);
-      final ResponseDTO responseDTO = response.readEntity(ResponseDTO.class);
-      checkStatusIsSuccess(responseDTO);
+      final GenericResponse responseEntity = response.readEntity(GenericResponse.class);
+      checkStatusIsSuccess(responseEntity);
     } catch (InternalServerErrorException e) {
       throw new ConnectionException(e);
     }
   }
 
-  public void addSubscriberToList(final AddSubscriberDTO requestBody) throws UnexpectedResponseCodeException, OperationFailedException {
-    Entity<AddSubscriberDTO> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
-    final Response response = webTarget.request().post(entity, Response.class);
-    checkResponseCode(response, OK_RESPONSE);
-    final ResponseDTO responseDTO = response.readEntity(ResponseDTO.class);
-    checkStatusIsSuccess(responseDTO);
-  }
-
-  private void checkStatusIsSuccess(final ResponseDTO responseDTO) throws OperationFailedException {
-    final Status status = responseDTO.getStatus();
-    if(!status.equals(Status.SUCCESS)) {
-      throw new OperationFailedException(responseDTO.getErrorMessage(), responseDTO.getStatus());
+  public GetListsResponse getLists(final GetListsRequest requestBody)
+      throws UnexpectedResponseCodeException, OperationFailedException, ConnectionException, UnexpectedResponseBodyException {
+    try {
+      final Response response = webTarget.request().post(Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE), Response.class);
+      checkResponseCode(response, OK_RESPONSE);
+      String responseString = response.readEntity(String.class);
+      return fromXml(responseString, GetListsResponse.class);
+    } catch (InternalServerErrorException e) {
+      throw new ConnectionException(e);
+    } catch(JAXBException e) {
+      throw new UnexpectedResponseBodyException(e);
     }
   }
 
-  private void checkResponseCode(final Response response, final int[] expectedStatusArray) throws UnexpectedResponseCodeException {
+  public GetSubscribersResponse getSubscribers(final GetSubscribersRequest requestBody)
+      throws UnexpectedResponseCodeException, OperationFailedException, ConnectionException, UnexpectedResponseBodyException {
+    try {
+      Entity<GetSubscribersRequest> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
+      final Response response = webTarget.request().post(entity, Response.class);
+      checkResponseCode(response, OK_RESPONSE);
+      String responseString = response.readEntity(String.class);
+      return fromXml(responseString, GetSubscribersResponse.class);
+    } catch (InternalServerErrorException e) {
+      throw new ConnectionException(e);
+    } catch(JAXBException e) {
+      throw new UnexpectedResponseBodyException(e);
+    }
+  }
+
+  public void addSubscriberToList(final AddSubscriberRequest requestBody) throws UnexpectedResponseCodeException, OperationFailedException {
+    Entity<AddSubscriberRequest> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
+    final Response response = webTarget.request().post(entity, Response.class);
+    checkResponseCode(response, OK_RESPONSE);
+    final GenericResponse responseEntity = response.readEntity(GenericResponse.class);
+    checkStatusIsSuccess(responseEntity);
+  }
+
+  public boolean isSubscriberOnList(final IsSubscriberOnListRequest requestBody) throws UnexpectedResponseCodeException, OperationFailedException {
+    Entity<IsSubscriberOnListRequest> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
+    final Response response = webTarget.request().post(entity, Response.class);
+    checkResponseCode(response, OK_RESPONSE);
+    final GenericResponse responseEntity = response.readEntity(GenericResponse.class);
+    checkStatusIsSuccess(responseEntity);
+    return extractIsOnList(responseEntity);
+  }
+
+  public void suppressSubscriber(final AddBannedSubscriberRequest requestBody) throws UnexpectedResponseCodeException, OperationFailedException {
+    Entity<AddBannedSubscriberRequest> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
+    final Response response = webTarget.request().post(entity, Response.class);
+    checkResponseCode(response, OK_RESPONSE);
+    final GenericResponse responseEntity = response.readEntity(GenericResponse.class);
+    checkStatusIsSuccess(responseEntity);
+  }
+
+  public String fetchStats(final FetchStatsRequest requestBody) throws UnexpectedResponseCodeException, OperationFailedException {
+    Entity<FetchStatsRequest> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
+    final Response response = webTarget.request().post(entity, Response.class);
+    checkResponseCode(response, OK_RESPONSE);
+    return response.readEntity(String.class);
+  }
+
+  private boolean extractIsOnList(final GenericResponse response) {
+    String data = response.getData();
+    return data != null && data.equals("1");
+  }
+
+  private void checkStatusIsSuccess(final GenericResponse response) throws OperationFailedException {
+    final Status status = response.getStatus();
+    if(!status.equals(Status.SUCCESS)) {
+      throw new OperationFailedException(response.getErrorMessage(), response.getStatus());
+    }
+  }
+
+  private void checkResponseCode(final javax.ws.rs.core.Response response, final int[] expectedStatusArray) throws UnexpectedResponseCodeException {
     final int actualStatus = response.getStatus();
     for(int status : expectedStatusArray) {
       if(status == actualStatus)

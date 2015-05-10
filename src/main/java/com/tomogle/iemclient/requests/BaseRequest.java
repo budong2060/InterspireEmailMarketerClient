@@ -7,16 +7,16 @@ import javax.xml.bind.annotation.XmlRootElement;
  * The Base class for 'top-level' request DTOs
  */
 @XmlRootElement(name = "xmlrequest")
-public class BaseRequestDTO {
+public class BaseRequest {
   private String username;
   private String usertoken;
   private RequestType requesttype;
   private RequestMethod requestmethod;
 
-  public BaseRequestDTO() {
+  public BaseRequest() {
   }
 
-  public BaseRequestDTO(final String username, final String usertoken, final RequestType requesttype, final RequestMethod requestmethod) {
+  public BaseRequest(final String username, final String usertoken, final RequestType requesttype, final RequestMethod requestmethod) {
     this.username = username;
     this.usertoken = usertoken;
     this.requesttype = requesttype;

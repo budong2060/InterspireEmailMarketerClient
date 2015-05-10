@@ -1,6 +1,6 @@
 package com.tomogle.iemclient.requests.stats;
 
-import com.tomogle.iemclient.requests.BaseRequestDTO;
+import com.tomogle.iemclient.requests.BaseRequest;
 import com.tomogle.iemclient.requests.RequestMethod;
 import com.tomogle.iemclient.requests.RequestType;
 
@@ -8,24 +8,24 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "xmlrequest")
-public class FetchStatsDTO extends BaseRequestDTO {
+public class FetchStatsRequest extends BaseRequest {
 
-  private FetchStatsDetailsDTO details;
+  private FetchStatsDetails details;
 
-  public FetchStatsDTO() {
+  public FetchStatsRequest() {
   }
 
-  public FetchStatsDTO(final String username, final String usertoken, final FetchStatsDetailsDTO details) {
+  public FetchStatsRequest(final String username, final String usertoken, final FetchStatsDetails details) {
     super(username, usertoken, RequestType.stats, RequestMethod.FetchStats);
     this.details = details;
   }
 
   @XmlElement(required = true)
-  public FetchStatsDetailsDTO getDetails() {
+  public FetchStatsDetails getDetails() {
     return details;
   }
 
-  public void setDetails(final FetchStatsDetailsDTO details) {
+  public void setDetails(final FetchStatsDetails details) {
     this.details = details;
   }
 }

@@ -4,15 +4,15 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "details")
-public class GetListsDetailsDTO {
+public class GetListsDetails {
 
   private int start;
   private int perpage;
 
-  public GetListsDetailsDTO() {
+  public GetListsDetails() {
   }
 
-  public GetListsDetailsDTO(final int start, final int perpage) {
+  public GetListsDetails(final int start, final int perpage) {
     this.start = start;
     this.perpage = perpage;
   }

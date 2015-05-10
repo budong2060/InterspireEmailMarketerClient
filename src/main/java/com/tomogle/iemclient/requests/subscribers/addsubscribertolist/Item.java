@@ -1,18 +1,18 @@
-package com.tomogle.iemclient.requests.subscribers.addsubscriber;
+package com.tomogle.iemclient.requests.subscribers.addsubscribertolist;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "item")
-public class ItemDTO {
+public class Item {
 
   private Integer fieldid;
   private String value;
 
-  public ItemDTO() {
+  public Item() {
   }
 
-  public ItemDTO(final Integer fieldid, final String value) {
+  public Item(final Integer fieldid, final String value) {
     this.fieldid = fieldid;
     this.value = value;
   }

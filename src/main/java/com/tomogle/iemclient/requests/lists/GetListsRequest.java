@@ -1,6 +1,6 @@
 package com.tomogle.iemclient.requests.lists;
 
-import com.tomogle.iemclient.requests.BaseRequestDTO;
+import com.tomogle.iemclient.requests.BaseRequest;
 import com.tomogle.iemclient.requests.RequestMethod;
 import com.tomogle.iemclient.requests.RequestType;
 
@@ -8,24 +8,24 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "xmlrequest")
-public class GetListsDTO extends BaseRequestDTO {
+public class GetListsRequest extends BaseRequest {
 
-  private GetListsDetailsDTO details;
+  private GetListsDetails details;
 
-  public GetListsDTO() {
+  public GetListsRequest() {
   }
 
-  public GetListsDTO(final String username, final String usertoken, final GetListsDetailsDTO details) {
+  public GetListsRequest(final String username, final String usertoken, final GetListsDetails details) {
     super(username, usertoken, RequestType.lists, RequestMethod.GetLists);
     this.details = details;
   }
 
   @XmlElement(required = true)
-  public GetListsDetailsDTO getDetails() {
+  public GetListsDetails getDetails() {
     return details;
   }
 
-  public void setDetails(final GetListsDetailsDTO details) {
+  public void setDetails(final GetListsDetails details) {
     this.details = details;
   }
 }

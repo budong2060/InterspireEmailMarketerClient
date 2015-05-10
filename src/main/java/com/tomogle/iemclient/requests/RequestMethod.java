@@ -11,5 +11,8 @@ public enum RequestMethod {
   DeleteSubscriber,
   xmlapitest,
   GetLists,
-  FetchStats
+  FetchStats,
+  GetSubscribers,
+  IsSubscriberOnList,
+  AddBannedSubscriber
 }

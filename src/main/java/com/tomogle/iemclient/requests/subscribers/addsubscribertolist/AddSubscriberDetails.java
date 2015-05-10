@@ -1,24 +1,24 @@
-package com.tomogle.iemclient.requests.subscribers.addsubscriber;
+package com.tomogle.iemclient.requests.subscribers.addsubscribertolist;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
 @XmlRootElement(name = "details")
-public class AddSubscriberDetailsDTO {
+public class AddSubscriberDetails {
 
   private String emailaddress;
   private String mailinglist;
   private Format format;
   private Confirmed confirmed;
-  private List<ItemDTO> customfields;
+  private List<Item> customfields;
 
-  public AddSubscriberDetailsDTO() {
+  public AddSubscriberDetails() {
     super();
   }
 
-  public AddSubscriberDetailsDTO(final String emailaddress, final String mailinglist, final Format format,
-      final Confirmed confirmed, final List<ItemDTO> customfields) {
+  public AddSubscriberDetails(final String emailaddress, final String mailinglist, final Format format,
+      final Confirmed confirmed, final List<Item> customfields) {
     this.emailaddress = emailaddress;
     this.mailinglist = mailinglist;
     this.format = format;
@@ -64,11 +64,11 @@ public class AddSubscriberDetailsDTO {
   }
 
   @XmlElement(required = true)
-  public List<ItemDTO> getCustomfields() {
+  public List<Item> getCustomfields() {
     return customfields;
   }
 
-  public void setCustomfields(final List<ItemDTO> customfields) {
+  public void setCustomfields(final List<Item> customfields) {
     this.customfields = customfields;
   }
 }
