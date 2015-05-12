@@ -12,6 +12,7 @@ public class AddSubscriberDetails {
   private Format format;
   private Confirmed confirmed;
   private List<Item> customfields;
+  private String ipaddress;
 
   public AddSubscriberDetails() {
     super();
@@ -70,5 +71,14 @@ public class AddSubscriberDetails {
 
   public void setCustomfields(final List<Item> customfields) {
     this.customfields = customfields;
+  }
+
+  @XmlElement(required = false)
+  public String getIpaddress() {
+    return ipaddress;
+  }
+
+  public void setIpaddress(final String ipaddress) {
+    this.ipaddress = ipaddress;
   }
 }

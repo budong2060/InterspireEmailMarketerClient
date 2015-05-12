@@ -24,6 +24,10 @@ public class SearchInfo {
     return list;
   }
 
+  /**
+   * Set the list ID to search for
+   * @param list The list ID to search for, or "any" for any list
+   */
   public void setList(final String list) {
     this.list = list;
   }

@@ -99,6 +99,8 @@ public class IEMClient {
     }
   }
 
+  // If they are not on the list, they are added.
+  // Then each of the custom fields are associated with the subscriber if necessary.
   public void addSubscriberToList(final AddSubscriberRequest requestBody) throws UnexpectedResponseCodeException, OperationFailedException {
     Entity<AddSubscriberRequest> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
     final Response response = webTarget.request().post(entity, Response.class);

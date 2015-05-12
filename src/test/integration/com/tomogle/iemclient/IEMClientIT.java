@@ -109,16 +109,18 @@ public class IEMClientIT {
   @Test
   public void testGetSubscribers() throws Exception {
     SearchInfo searchInfo = new SearchInfo();
-    searchInfo.setList(testListId);
+    searchInfo.setList("any");
     GetSubscriberDetails details = new GetSubscriberDetails();
     details.setSearchinfo(searchInfo);
     GetSubscribersRequest request = new GetSubscribersRequest(apiUsername, apiToken, details);
+    System.out.println(toXml(request));
 
     GetSubscribersResponse subscribers = client.getSubscribers(request);
     assertNotNull(subscribers);
     assertNotNull(subscribers.getStatus());
     assertEquals(Status.SUCCESS, subscribers.getStatus());
     assertNotNull(subscribers.getData());
+    System.out.println(toXml(subscribers));
   }
 
   // Get lists
@@ -127,6 +129,7 @@ public class IEMClientIT {
   public void testGetLists() throws Exception {
     GetListsRequest getListsRequest = RequestCreationUtil.getListsRequest(apiUsername, apiToken, 0, 200);
     GetListsResponse response = client.getLists(getListsRequest);
+    System.out.println(toXml(response));
     assertNotNull("Could not get lists response", response);
     assertNotNull(response.getStatus());
     assertEquals(Status.SUCCESS, response.getStatus());
