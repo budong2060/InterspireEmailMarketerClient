@@ -9,21 +9,27 @@ import java.util.List;
 @XmlRootElement(name = "data")
 public class GetSubscribersData {
 
-  private List<Item> item;
+  private Integer count;
+  private SubscriberList subscriberlist;
 
   public GetSubscribersData() {
   }
 
-  public GetSubscribersData(final List<Item> item) {
-    this.item = item;
+  @XmlElement(name = "count")
+  public Integer getCount() {
+    return count;
   }
 
-  @XmlElement
-  public List<Item> getItem() {
-    return item;
+  public void setCount(final Integer count) {
+    this.count = count;
   }
 
-  public void setItem(final List<Item> item) {
-    this.item = item;
+  @XmlElement(name = "subscriberlist")
+  public SubscriberList getSubscriberlist() {
+    return subscriberlist;
+  }
+
+  public void setSubscriberlist(final SubscriberList subscriberlist) {
+    this.subscriberlist = subscriberlist;
   }
 }
