@@ -2,17 +2,17 @@ package com.tomogle.iemclient.requests.subscribers.addsubscribertolist;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
 
-@XmlRootElement(name = "item")
-public class Item {
+public class CustomFields {
 
   private String fieldid;
   private String value;
 
-  public Item() {
+  public CustomFields() {
   }
 
-  public Item(final String fieldid, final String value) {
+  public CustomFields(final String fieldid, final String value) {
     this.fieldid = fieldid;
     this.value = value;
   }

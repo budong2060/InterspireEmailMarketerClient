@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class GetSubscriberDetails {
 
   private SearchInfo searchinfo;
+  private Boolean countonly;
 
   public GetSubscriberDetails() {
   }
@@ -22,5 +23,14 @@ public class GetSubscriberDetails {
 
   public void setSearchinfo(final SearchInfo searchinfo) {
     this.searchinfo = searchinfo;
+  }
+
+  @XmlElement
+  public Boolean getCountonly() {
+    return countonly;
+  }
+
+  public void setCountonly(final Boolean countonly) {
+    this.countonly = countonly;
   }
 }

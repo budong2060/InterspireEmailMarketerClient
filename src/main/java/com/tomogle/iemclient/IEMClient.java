@@ -10,6 +10,7 @@ import com.tomogle.iemclient.requests.lists.response.GetListsResponse;
 import com.tomogle.iemclient.requests.stats.FetchStatsRequest;
 import com.tomogle.iemclient.requests.subscribers.addbannedsubscriber.AddBannedSubscriberRequest;
 import com.tomogle.iemclient.requests.subscribers.addsubscribertolist.AddSubscriberRequest;
+import com.tomogle.iemclient.requests.subscribers.getsubscribers.GetSubscribersCountRequest;
 import com.tomogle.iemclient.requests.subscribers.getsubscribers.GetSubscribersRequest;
 import com.tomogle.iemclient.requests.subscribers.getsubscribers.response.GetSubscribersResponse;
 import com.tomogle.iemclient.requests.subscribers.issubscriberonlist.IsSubscriberOnListRequest;
@@ -92,6 +93,21 @@ public class IEMClient {
       checkResponseCode(response, OK_RESPONSE);
       String responseString = response.readEntity(String.class);
       return fromXml(responseString, GetSubscribersResponse.class);
+    } catch (InternalServerErrorException e) {
+      throw new ConnectionException(e);
+    } catch(JAXBException e) {
+      throw new UnexpectedResponseBodyException(e);
+    }
+  }
+
+  public GenericResponse getSubscriberCount(final GetSubscribersCountRequest requestBody)
+      throws UnexpectedResponseCodeException, OperationFailedException, ConnectionException, UnexpectedResponseBodyException {
+    try {
+      Entity<GetSubscribersCountRequest> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
+      final Response response = webTarget.request().post(entity, Response.class);
+      checkResponseCode(response, OK_RESPONSE);
+      String responseString = response.readEntity(String.class);
+      return fromXml(responseString, GenericResponse.class);
     } catch (InternalServerErrorException e) {
       throw new ConnectionException(e);
     } catch(JAXBException e) {

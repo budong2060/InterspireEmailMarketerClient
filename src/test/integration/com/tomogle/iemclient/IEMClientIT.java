@@ -10,14 +10,17 @@ import com.tomogle.iemclient.requests.stats.StatsType;
 import com.tomogle.iemclient.requests.subscribers.addbannedsubscriber.AddBannedSubscriberRequest;
 import com.tomogle.iemclient.requests.subscribers.addsubscribertolist.AddSubscriberRequest;
 import com.tomogle.iemclient.requests.subscribers.addsubscribertolist.Confirmed;
+import com.tomogle.iemclient.requests.subscribers.addsubscribertolist.CustomFields;
 import com.tomogle.iemclient.requests.subscribers.addsubscribertolist.Format;
 import com.tomogle.iemclient.requests.subscribers.addsubscribertolist.Item;
 import com.tomogle.iemclient.requests.subscribers.getsubscribers.GetSubscriberDetails;
+import com.tomogle.iemclient.requests.subscribers.getsubscribers.GetSubscribersCountRequest;
 import com.tomogle.iemclient.requests.subscribers.getsubscribers.GetSubscribersRequest;
 import com.tomogle.iemclient.requests.subscribers.getsubscribers.SearchInfo;
 import com.tomogle.iemclient.requests.subscribers.getsubscribers.response.GetSubscribersResponse;
 import com.tomogle.iemclient.requests.subscribers.issubscriberonlist.Details;
 import com.tomogle.iemclient.requests.subscribers.issubscriberonlist.IsSubscriberOnListRequest;
+import com.tomogle.iemclient.response.GenericResponse;
 import com.tomogle.iemclient.response.Status;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -84,23 +87,16 @@ public class IEMClientIT {
   
   @Test
   public void testAddSubscriberToList() throws Exception {
-
-
-
-
-    List<Item> customFields = new ArrayList<Item>();
-    Item item1 = new Item(CustomFields.TITLE.ordinal() + 1, "Mr");
-    Item item2 = new Item(CustomFields.FIRSTNAME.ordinal() + 1, "John");
+    List<CustomFields> customFields = new ArrayList<CustomFields>();
+    CustomFields item1 = new CustomFields(Integer.toString(CustomFieldOptions.FIRSTNAME.ordinal() + 1), "John");
+    CustomFields item2 = new CustomFields(Integer.toString(CustomFieldOptions.CITY.ordinal() + 1), "San Francisco");
     customFields.add(item1);
     customFields.add(item2);
-
     final AddSubscriberRequest addSubscriberRequestDTO = RequestCreationUtil.addSubscriberRequest(apiUsername, apiToken,
         EMAIL_ADDRESS_TO_ADD,
         testListId,
         Format.text, Confirmed.yes, customFields);
-
     System.out.println(toXml(addSubscriberRequestDTO));
-
     client.addSubscriberToList(addSubscriberRequestDTO);
   }
 
@@ -121,6 +117,19 @@ public class IEMClientIT {
     assertEquals(Status.SUCCESS, subscribers.getStatus());
     assertNotNull(subscribers.getData());
     System.out.println(toXml(subscribers));
+  }
+
+  @Test
+  public void testGetSubscribersCountOnly() throws Exception {
+    GetSubscribersCountRequest request = RequestCreationUtil.getSubscribersCountRequest(apiUsername, apiToken, "any");
+    System.out.println(toXml(request));
+
+    GenericResponse subscriberCount = client.getSubscriberCount(request);
+    assertNotNull(subscriberCount);
+    assertNotNull(subscriberCount.getStatus());
+    assertEquals(Status.SUCCESS, subscriberCount.getStatus());
+    assertNotNull(subscriberCount.getData());
+    System.out.println(toXml(subscriberCount));
   }
 
   // Get lists

@@ -12,10 +12,12 @@ import com.tomogle.iemclient.requests.subscribers.addbannedsubscriber.Details;
 import com.tomogle.iemclient.requests.subscribers.addsubscribertolist.AddSubscriberRequest;
 import com.tomogle.iemclient.requests.subscribers.addsubscribertolist.AddSubscriberDetails;
 import com.tomogle.iemclient.requests.subscribers.addsubscribertolist.Confirmed;
+import com.tomogle.iemclient.requests.subscribers.addsubscribertolist.CustomFields;
 import com.tomogle.iemclient.requests.subscribers.addsubscribertolist.Format;
 import com.tomogle.iemclient.requests.subscribers.addsubscribertolist.Item;
 import com.tomogle.iemclient.requests.subscribers.deletesubscriber.DeleteSubscriberRequest;
 import com.tomogle.iemclient.requests.subscribers.getsubscribers.GetSubscriberDetails;
+import com.tomogle.iemclient.requests.subscribers.getsubscribers.GetSubscribersCountRequest;
 import com.tomogle.iemclient.requests.subscribers.getsubscribers.GetSubscribersRequest;
 import com.tomogle.iemclient.requests.subscribers.getsubscribers.SearchInfo;
 
@@ -44,8 +46,9 @@ public class RequestCreationUtil {
   }
 
   public static AddSubscriberRequest addSubscriberRequest(final String apiUsername, final String apiToken, final String emailAddress,
-      final String mailingListId, final Format format, final Confirmed confirmed, final List<Item> customFields) {
-    return new AddSubscriberRequest(apiUsername, apiToken, new AddSubscriberDetails(emailAddress, mailingListId, format, confirmed, customFields));
+      final String mailingListId, final Format format, final Confirmed confirmed, final List<CustomFields> customFields) {
+    return new AddSubscriberRequest(apiUsername, apiToken, new AddSubscriberDetails(emailAddress, mailingListId, format, confirmed,
+        customFields));
   }
 
   public static DeleteSubscriberRequest deleteSubscriberRequest(final String apiUsername, final String apiToken, final String listId,
@@ -73,6 +76,14 @@ public class RequestCreationUtil {
   public static GetSubscribersRequest getSubscribersRequest(final String apiUsername, final String apiToken, final String listId,
       final String email) {
     return new GetSubscribersRequest(apiUsername, apiToken, new GetSubscriberDetails(new SearchInfo(listId, email)));
+  }
+
+  public static GetSubscribersCountRequest getSubscribersCountRequest(final String apiUsername, final String apiToken, final String listId) {
+    SearchInfo searchinfo = new SearchInfo();
+    searchinfo.setList(listId);
+    GetSubscriberDetails details = new GetSubscriberDetails(searchinfo);
+    details.setCountonly(true);
+    return new GetSubscribersCountRequest(apiUsername, apiToken, details);
   }
 
   public static GetSubscribersRequest getSubscribersRequestByEmail(final String apiUsername, final String apiToken, final String email) {
