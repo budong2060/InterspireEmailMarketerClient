@@ -21,6 +21,8 @@ import com.tomogle.iemclient.requests.subscribers.getsubscribers.SearchInfo;
 import com.tomogle.iemclient.requests.subscribers.getsubscribers.response.GetSubscribersResponse;
 import com.tomogle.iemclient.requests.subscribers.issubscriberonlist.Details;
 import com.tomogle.iemclient.requests.subscribers.issubscriberonlist.IsSubscriberOnListRequest;
+import com.tomogle.iemclient.requests.subscribers.savesubscribercustomfield.SaveSubscriberCustomFieldRequest;
+import com.tomogle.iemclient.requests.subscribers.savesubscribercustomfield.SubscriberIds;
 import com.tomogle.iemclient.response.GenericResponse;
 import com.tomogle.iemclient.response.Status;
 import org.junit.BeforeClass;
@@ -201,7 +203,23 @@ public class IEMClientIT {
     ChangeSubscriberConfirmRequest request = RequestCreationUtil
         .changeSubscriberConfirmStatusForAllLists(apiUsername, apiToken,
             com.tomogle.iemclient.requests.subscribers.changesubscriberconfirm.Status.unconfirm, subscriberid);
-    GenericResponse genericResponse = client.ChangeSubscriberConfirmStatus(request);
+    GenericResponse genericResponse = client.changeSubscriberConfirmStatus(request);
     System.out.println(toXml(genericResponse));
+  }
+
+  @Test
+  public void testSaveSubscriberCustomField() throws Exception {
+    String fieldId = "8";
+    String newValue = "London";
+    List<SubscriberIds> subscriberIds = new ArrayList<SubscriberIds>();
+    subscriberIds.add(new SubscriberIds("19"));
+    SaveSubscriberCustomFieldRequest request =
+        new SaveSubscriberCustomFieldRequest(apiUsername, apiToken,
+            new com.tomogle.iemclient.requests.subscribers.savesubscribercustomfield.Details(subscriberIds, fieldId, newValue));
+
+    System.out.println(toXml(request));
+    GenericResponse genericResponse = client.saveSubscriberCustomField(request);
+    System.out.println(toXml(genericResponse));
+
   }
 }

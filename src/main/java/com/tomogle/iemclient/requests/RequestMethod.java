@@ -15,5 +15,6 @@ public enum RequestMethod {
   GetSubscribers,
   IsSubscriberOnList,
   AddBannedSubscriber,
-  ChangeSubscriberConfirm
+  ChangeSubscriberConfirm,
+  SaveSubscriberCustomField
 }

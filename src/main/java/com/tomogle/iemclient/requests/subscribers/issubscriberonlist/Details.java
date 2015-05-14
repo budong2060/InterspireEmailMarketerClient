@@ -1,7 +1,10 @@
 package com.tomogle.iemclient.requests.subscribers.issubscriberonlist;
 
+import com.tomogle.iemclient.requests.subscribers.savesubscribercustomfield.SubscriberIds;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
 
 @XmlRootElement(name = "details")
 public class Details {

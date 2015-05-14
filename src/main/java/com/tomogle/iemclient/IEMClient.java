@@ -17,6 +17,7 @@ import com.tomogle.iemclient.requests.subscribers.getsubscribers.GetSubscribersC
 import com.tomogle.iemclient.requests.subscribers.getsubscribers.GetSubscribersRequest;
 import com.tomogle.iemclient.requests.subscribers.getsubscribers.response.GetSubscribersResponse;
 import com.tomogle.iemclient.requests.subscribers.issubscriberonlist.IsSubscriberOnListRequest;
+import com.tomogle.iemclient.requests.subscribers.savesubscribercustomfield.SaveSubscriberCustomFieldRequest;
 import com.tomogle.iemclient.response.GenericResponse;
 import com.tomogle.iemclient.response.Status;
 import org.glassfish.jersey.client.ClientConfig;
@@ -166,9 +167,19 @@ public class IEMClient {
   /**
    * If an incorrect subscriber ID is provided then this method will report success.
    */
-  public GenericResponse ChangeSubscriberConfirmStatus(final ChangeSubscriberConfirmRequest requestBody)
+  public GenericResponse changeSubscriberConfirmStatus(final ChangeSubscriberConfirmRequest requestBody)
       throws OperationFailedException, UnexpectedResponseCodeException, JAXBException {
     Entity<ChangeSubscriberConfirmRequest> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
+    final Response response = webTarget.request().post(entity, Response.class);
+    checkResponseCode(response, OK_RESPONSE);
+    final GenericResponse responseEntity = response.readEntity(GenericResponse.class);
+    checkStatusIsSuccess(responseEntity);
+    return responseEntity;
+  }
+
+  public GenericResponse saveSubscriberCustomField(final SaveSubscriberCustomFieldRequest requestBody)
+      throws OperationFailedException, UnexpectedResponseCodeException, JAXBException {
+    Entity<SaveSubscriberCustomFieldRequest> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
     final Response response = webTarget.request().post(entity, Response.class);
     checkResponseCode(response, OK_RESPONSE);
     final GenericResponse responseEntity = response.readEntity(GenericResponse.class);
