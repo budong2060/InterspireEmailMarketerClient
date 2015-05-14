@@ -6,24 +6,24 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "details")
 public class Details {
 
-  private String email;
+  private String subscriberid;
   private String list;
 
   public Details() {
   }
 
-  public Details(final String email, final String list) {
-    this.email = email;
+  public Details(final String subscriberid, final String list) {
+    this.subscriberid = subscriberid;
     this.list = list;
   }
 
-  @XmlElement(name = "emailaddress")
-  public String getEmail() {
-    return email;
+  @XmlElement(name = "subscriberid")
+  public String getSubscriberid() {
+    return subscriberid;
   }
 
-  public void setEmail(final String email) {
-    this.email = email;
+  public void setSubscriberid(final String subscriberid) {
+    this.subscriberid = subscriberid;
   }
 
   @XmlElement(name = "listids")

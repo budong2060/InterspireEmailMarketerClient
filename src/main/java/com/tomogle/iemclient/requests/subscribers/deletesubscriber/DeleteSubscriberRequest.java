@@ -7,11 +7,10 @@ import com.tomogle.iemclient.requests.RequestType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement(name = "details")
+@XmlRootElement(name = "xmlrequest")
 public class DeleteSubscriberRequest extends BaseRequest {
 
-  private String list;
-  private String emailaddress;
+  private Details details;
 
   public DeleteSubscriberRequest() {
     super();
@@ -19,25 +18,15 @@ public class DeleteSubscriberRequest extends BaseRequest {
 
   public DeleteSubscriberRequest(final String username, final String usertoken, final String list, final String emailaddress) {
     super(username, usertoken, RequestType.subscribers, RequestMethod.DeleteSubscriber);
-    this.list = list;
-    this.emailaddress = emailaddress;
+    details = new Details(list, emailaddress);
   }
 
   @XmlElement(required = true)
-  public String getList() {
-    return list;
+  public Details getDetails() {
+    return details;
   }
 
-  public void setList(final String list) {
-    this.list = list;
-  }
-
-  @XmlElement(required = true)
-  public String getEmailaddress() {
-    return emailaddress;
-  }
-
-  public void setEmailaddress(final String emailaddress) {
-    this.emailaddress = emailaddress;
+  public void setDetails(final Details details) {
+    this.details = details;
   }
 }

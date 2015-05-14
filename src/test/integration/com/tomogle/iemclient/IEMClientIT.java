@@ -12,7 +12,8 @@ import com.tomogle.iemclient.requests.subscribers.addsubscribertolist.AddSubscri
 import com.tomogle.iemclient.requests.subscribers.addsubscribertolist.Confirmed;
 import com.tomogle.iemclient.requests.subscribers.addsubscribertolist.CustomFields;
 import com.tomogle.iemclient.requests.subscribers.addsubscribertolist.Format;
-import com.tomogle.iemclient.requests.subscribers.addsubscribertolist.Item;
+import com.tomogle.iemclient.requests.subscribers.changesubscriberconfirm.ChangeSubscriberConfirmRequest;
+import com.tomogle.iemclient.requests.subscribers.deletesubscriber.DeleteSubscriberRequest;
 import com.tomogle.iemclient.requests.subscribers.getsubscribers.GetSubscriberDetails;
 import com.tomogle.iemclient.requests.subscribers.getsubscribers.GetSubscribersCountRequest;
 import com.tomogle.iemclient.requests.subscribers.getsubscribers.GetSubscribersRequest;
@@ -23,6 +24,7 @@ import com.tomogle.iemclient.requests.subscribers.issubscriberonlist.IsSubscribe
 import com.tomogle.iemclient.response.GenericResponse;
 import com.tomogle.iemclient.response.Status;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -58,7 +60,6 @@ public class IEMClientIT {
     apiToken = properties.getProperty("iem.api.token");
     testListId = properties.getProperty("iem.api.listid");
     client = new IEMClient(apiUrl, 2000, 2000);
-
   }
 
   // Check token
@@ -84,6 +85,7 @@ public class IEMClientIT {
     IEMClient badClient = new IEMClient("http://badurl", 500, 500);
     badClient.checkToken(RequestCreationUtil.checkTokenRequest(apiUsername, BAD_TOKEN));
   }
+
   
   @Test
   public void testAddSubscriberToList() throws Exception {
@@ -92,12 +94,26 @@ public class IEMClientIT {
     CustomFields item2 = new CustomFields(Integer.toString(CustomFieldOptions.CITY.ordinal() + 1), "San Francisco");
     customFields.add(item1);
     customFields.add(item2);
-    final AddSubscriberRequest addSubscriberRequestDTO = RequestCreationUtil.addSubscriberRequest(apiUsername, apiToken,
+    final AddSubscriberRequest addSubscriberRequest = RequestCreationUtil.addSubscriberRequest(apiUsername, apiToken,
         EMAIL_ADDRESS_TO_ADD,
         testListId,
         Format.text, Confirmed.yes, customFields);
-    System.out.println(toXml(addSubscriberRequestDTO));
-    client.addSubscriberToList(addSubscriberRequestDTO);
+    System.out.println(toXml(addSubscriberRequest));
+    GenericResponse response = client.addSubscriberToList(addSubscriberRequest);
+    assertNotNull(response);
+    System.out.println(toXml(response));
+  }
+
+  // Delete subscriber
+
+  @Ignore
+  @Test
+  public void testDeleteSubscriberFromList() throws Exception {
+    DeleteSubscriberRequest deleteSubscriberRequest = RequestCreationUtil
+        .deleteSubscriberRequest(apiUsername, apiToken, testListId, EMAIL_ADDRESS_TO_ADD);
+    System.out.println(toXml(deleteSubscriberRequest));
+    GenericResponse genericResponse = client.deleteSubscriberFromList(deleteSubscriberRequest);
+    System.out.println(toXml(genericResponse));
   }
 
   // Get subscribers
@@ -141,17 +157,17 @@ public class IEMClientIT {
     System.out.println(toXml(response));
     assertNotNull("Could not get lists response", response);
     assertNotNull(response.getStatus());
-    assertEquals(Status.SUCCESS, response.getStatus());
-    assertNotNull(response.getData());
   }
 
   // Is subscriber on list
 
   @Test
   public void testIsSubscriberOnList() throws Exception {
+    String id = "18";
     IsSubscriberOnListRequest request = new IsSubscriberOnListRequest(apiUsername, apiToken);
-    request.setDetails(new Details(EMAIL_ADDRESS_TO_ADD, testListId));
-    boolean result = client.isSubscriberOnList(request);
+    request.setDetails(new Details(id, testListId));
+    GenericResponse result = client.isSubscriberOnList(request);
+    System.out.println(toXml(result));
   }
 
   // Suppress subscriber
@@ -177,5 +193,15 @@ public class IEMClientIT {
     FetchStatsRequest request = RequestCreationUtil.fetchStatsRequest(apiUsername, apiToken, "1", StatsType.a);
     String stats = client.fetchStats(request);
     System.out.println(stats);
+  }
+
+  @Test
+  public void testChangeSubscriberConfirmStatusForAllLists() throws Exception {
+    String subscriberid = "100";
+    ChangeSubscriberConfirmRequest request = RequestCreationUtil
+        .changeSubscriberConfirmStatusForAllLists(apiUsername, apiToken,
+            com.tomogle.iemclient.requests.subscribers.changesubscriberconfirm.Status.unconfirm, subscriberid);
+    GenericResponse genericResponse = client.ChangeSubscriberConfirmStatus(request);
+    System.out.println(toXml(genericResponse));
   }
 }

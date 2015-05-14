@@ -14,5 +14,6 @@ public enum RequestMethod {
   FetchStats,
   GetSubscribers,
   IsSubscriberOnList,
-  AddBannedSubscriber
+  AddBannedSubscriber,
+  ChangeSubscriberConfirm
 }

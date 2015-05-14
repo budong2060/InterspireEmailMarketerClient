@@ -4,12 +4,15 @@ import com.tomogle.iemclient.exception.ConnectionException;
 import com.tomogle.iemclient.exception.OperationFailedException;
 import com.tomogle.iemclient.exception.UnexpectedResponseBodyException;
 import com.tomogle.iemclient.exception.UnexpectedResponseCodeException;
+import com.tomogle.iemclient.requests.BaseRequest;
 import com.tomogle.iemclient.requests.authentication.checktoken.CheckTokenRequest;
 import com.tomogle.iemclient.requests.lists.GetListsRequest;
 import com.tomogle.iemclient.requests.lists.response.GetListsResponse;
 import com.tomogle.iemclient.requests.stats.FetchStatsRequest;
 import com.tomogle.iemclient.requests.subscribers.addbannedsubscriber.AddBannedSubscriberRequest;
 import com.tomogle.iemclient.requests.subscribers.addsubscribertolist.AddSubscriberRequest;
+import com.tomogle.iemclient.requests.subscribers.changesubscriberconfirm.ChangeSubscriberConfirmRequest;
+import com.tomogle.iemclient.requests.subscribers.deletesubscriber.DeleteSubscriberRequest;
 import com.tomogle.iemclient.requests.subscribers.getsubscribers.GetSubscribersCountRequest;
 import com.tomogle.iemclient.requests.subscribers.getsubscribers.GetSubscribersRequest;
 import com.tomogle.iemclient.requests.subscribers.getsubscribers.response.GetSubscribersResponse;
@@ -29,6 +32,7 @@ import javax.ws.rs.core.Response;
 import javax.xml.bind.JAXBException;
 
 import static com.tomogle.iemclient.Utils.fromXml;
+import static com.tomogle.iemclient.Utils.toXml;
 
 public class IEMClient {
 
@@ -117,29 +121,39 @@ public class IEMClient {
 
   // If they are not on the list, they are added.
   // Then each of the custom fields are associated with the subscriber if necessary.
-  public void addSubscriberToList(final AddSubscriberRequest requestBody) throws UnexpectedResponseCodeException, OperationFailedException {
+  public GenericResponse addSubscriberToList(final AddSubscriberRequest requestBody) throws UnexpectedResponseCodeException, OperationFailedException {
     Entity<AddSubscriberRequest> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
     final Response response = webTarget.request().post(entity, Response.class);
     checkResponseCode(response, OK_RESPONSE);
     final GenericResponse responseEntity = response.readEntity(GenericResponse.class);
     checkStatusIsSuccess(responseEntity);
+    return responseEntity;
   }
 
-  public boolean isSubscriberOnList(final IsSubscriberOnListRequest requestBody) throws UnexpectedResponseCodeException, OperationFailedException {
-    Entity<IsSubscriberOnListRequest> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
+  public GenericResponse deleteSubscriberFromList(final DeleteSubscriberRequest requestBody)
+      throws UnexpectedResponseCodeException, OperationFailedException {
+    Entity<DeleteSubscriberRequest> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
     final Response response = webTarget.request().post(entity, Response.class);
     checkResponseCode(response, OK_RESPONSE);
     final GenericResponse responseEntity = response.readEntity(GenericResponse.class);
     checkStatusIsSuccess(responseEntity);
-    return extractIsOnList(responseEntity);
+    return responseEntity;
   }
 
-  public void suppressSubscriber(final AddBannedSubscriberRequest requestBody) throws UnexpectedResponseCodeException, OperationFailedException {
+  public GenericResponse isSubscriberOnList(final IsSubscriberOnListRequest requestBody) throws UnexpectedResponseCodeException, OperationFailedException {
+    Entity<IsSubscriberOnListRequest> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
+    final Response response = webTarget.request().post(entity, Response.class);
+    checkResponseCode(response, OK_RESPONSE);
+    return response.readEntity(GenericResponse.class);
+  }
+
+  public GenericResponse suppressSubscriber(final AddBannedSubscriberRequest requestBody) throws UnexpectedResponseCodeException, OperationFailedException {
     Entity<AddBannedSubscriberRequest> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
     final Response response = webTarget.request().post(entity, Response.class);
     checkResponseCode(response, OK_RESPONSE);
     final GenericResponse responseEntity = response.readEntity(GenericResponse.class);
     checkStatusIsSuccess(responseEntity);
+    return responseEntity;
   }
 
   public String fetchStats(final FetchStatsRequest requestBody) throws UnexpectedResponseCodeException, OperationFailedException {
@@ -149,9 +163,17 @@ public class IEMClient {
     return response.readEntity(String.class);
   }
 
-  private boolean extractIsOnList(final GenericResponse response) {
-    String data = response.getData();
-    return data != null && data.equals("1");
+  /**
+   * If an incorrect subscriber ID is provided then this method will report success.
+   */
+  public GenericResponse ChangeSubscriberConfirmStatus(final ChangeSubscriberConfirmRequest requestBody)
+      throws OperationFailedException, UnexpectedResponseCodeException, JAXBException {
+    Entity<ChangeSubscriberConfirmRequest> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
+    final Response response = webTarget.request().post(entity, Response.class);
+    checkResponseCode(response, OK_RESPONSE);
+    final GenericResponse responseEntity = response.readEntity(GenericResponse.class);
+    checkStatusIsSuccess(responseEntity);
+    return responseEntity;
   }
 
   private void checkStatusIsSuccess(final GenericResponse response) throws OperationFailedException {

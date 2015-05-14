@@ -14,7 +14,8 @@ import com.tomogle.iemclient.requests.subscribers.addsubscribertolist.AddSubscri
 import com.tomogle.iemclient.requests.subscribers.addsubscribertolist.Confirmed;
 import com.tomogle.iemclient.requests.subscribers.addsubscribertolist.CustomFields;
 import com.tomogle.iemclient.requests.subscribers.addsubscribertolist.Format;
-import com.tomogle.iemclient.requests.subscribers.addsubscribertolist.Item;
+import com.tomogle.iemclient.requests.subscribers.changesubscriberconfirm.ChangeSubscriberConfirmRequest;
+import com.tomogle.iemclient.requests.subscribers.changesubscriberconfirm.Status;
 import com.tomogle.iemclient.requests.subscribers.deletesubscriber.DeleteSubscriberRequest;
 import com.tomogle.iemclient.requests.subscribers.getsubscribers.GetSubscriberDetails;
 import com.tomogle.iemclient.requests.subscribers.getsubscribers.GetSubscribersCountRequest;
@@ -96,5 +97,17 @@ public class RequestCreationUtil {
     SearchInfo searchInfo = new SearchInfo();
     searchInfo.setList(listId);
     return new GetSubscribersRequest(apiUsername, apiToken, new GetSubscriberDetails(searchInfo));
+  }
+
+  public static ChangeSubscriberConfirmRequest changeSubscriberConfirmStatusForAllLists(final String apiUsername, final String apiToken,
+      final Status status, final String subscriberid) {
+    return new ChangeSubscriberConfirmRequest(apiUsername, apiToken, new com.tomogle.iemclient.requests.subscribers
+        .changesubscriberconfirm.Details(status, subscriberid));
+  }
+
+  public static ChangeSubscriberConfirmRequest changeSubscriberConfirmStatusForList(final String apiUsername, final String apiToken,
+      final Status status, final String listid,final String subscriberid) {
+    return new ChangeSubscriberConfirmRequest(apiUsername, apiToken, new com.tomogle.iemclient.requests.subscribers
+        .changesubscriberconfirm.Details(status, listid, subscriberid));
   }
 }
