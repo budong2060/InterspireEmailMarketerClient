@@ -1,7 +1,28 @@
 # InterspireEmailMarketerClient
-Java client for Interspire Email Marketer API
+Java client for the Interspire Email Marketer (IEM) XML API
 
-Currently a work in progress.
+To instantiate a new client: `IEMClient client = new Client("http://mydomain/iem/xml.php", 60000, 60000)`
+
+To make a request against the IEM API:
+
+1. 
+a) Build a request object for the request that you want to make.
+```java
+CheckTokenRequest request =  new CheckTokenRequest(apiUsername, apiToken);
+```
+or
+b) Use the RequestCreationUtil convenience methods to create your request.
+```java
+CheckTokenRequest request =  RequestCreationUtil.checkTokenRequest(apiUsername, apiToken);
+```
+2. Make the request using the client:
+```java
+GenericResponse response = client.checkToken(request);
+```
+3. The response entity object can then be queried
+```java
+response.getStatus();
+```
 
 To run integration tests successfully copy test/resources/sampleiem.properties to test/resources/iem.properties.
 Then provide values for each of the properties:

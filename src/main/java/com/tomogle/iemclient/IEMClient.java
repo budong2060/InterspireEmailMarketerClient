@@ -23,6 +23,7 @@ import com.tomogle.iemclient.response.Status;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 
+import javax.net.ssl.SSLContext;
 import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -55,6 +56,20 @@ public class IEMClient {
     createWebTarget(client, xmlApiUrl);
   }
 
+  public IEMClient(final SSLContext sslContext, final String xmlApiUrl, final int connectionTimeout, final int readTimeout) {
+    Client client = ClientBuilder.newBuilder().sslContext(sslContext).build()
+                                 .property(ClientProperties.CONNECT_TIMEOUT, connectionTimeout)
+                                 .property(ClientProperties.READ_TIMEOUT, readTimeout);
+    createWebTarget(client, xmlApiUrl);
+  }
+
+  public IEMClient(final SSLContext sslContext, final ClientConfig clientConfig, final String xmlApiUrl, final int connectionTimeout, final int readTimeout) {
+    Client client = ClientBuilder.newBuilder().withConfig(clientConfig).sslContext(sslContext).build()
+                                 .property(ClientProperties.CONNECT_TIMEOUT, connectionTimeout)
+                                 .property(ClientProperties.READ_TIMEOUT, readTimeout);
+    createWebTarget(client, xmlApiUrl);
+  }
+
   private void createWebTarget(final Client client, final String xmlApiUrl) {
     webTarget = client.target(xmlApiUrl);
   }
@@ -63,14 +78,16 @@ public class IEMClient {
    * Used for testing your connection to the IEM API.
    * @param requestBody A data transfer object representing the XML request body.
    * @throws OperationFailedException Thrown if the server response indicates operation failure.
+   * @return An entity representing the response.
    */
-  public void checkToken(final CheckTokenRequest requestBody)
+  public GenericResponse checkToken(final CheckTokenRequest requestBody)
       throws OperationFailedException, ConnectionException, UnexpectedResponseCodeException {
     try {
       final Response response = webTarget.request().post(Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE), Response.class);
       checkResponseCode(response, OK_RESPONSE);
       final GenericResponse responseEntity = response.readEntity(GenericResponse.class);
       checkStatusIsSuccess(responseEntity);
+      return responseEntity;
     } catch (InternalServerErrorException e) {
       throw new ConnectionException(e);
     }
@@ -157,6 +174,7 @@ public class IEMClient {
     return responseEntity;
   }
 
+  // TODO: Create entity type for fetchStats response
   public String fetchStats(final FetchStatsRequest requestBody) throws UnexpectedResponseCodeException, OperationFailedException {
     Entity<FetchStatsRequest> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
     final Response response = webTarget.request().post(entity, Response.class);
@@ -165,7 +183,7 @@ public class IEMClient {
   }
 
   /**
-   * If an incorrect subscriber ID is provided then this method will report success.
+   * Warning: If an incorrect subscriber ID is provided then this method will report success due to a quirk of the IEM API.
    */
   public GenericResponse changeSubscriberConfirmStatus(final ChangeSubscriberConfirmRequest requestBody)
       throws OperationFailedException, UnexpectedResponseCodeException, JAXBException {

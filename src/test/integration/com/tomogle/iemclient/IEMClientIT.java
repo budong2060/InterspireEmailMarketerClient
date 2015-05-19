@@ -51,7 +51,6 @@ public class IEMClientIT {
 
   private static final String BAD_TOKEN = "badtoken";
 
-  private static final String EMAIL_ADDRESS = "xyz@mydomain.com";
   private static final String EMAIL_ADDRESS_TO_ADD = "some@address.tld";
 
 
