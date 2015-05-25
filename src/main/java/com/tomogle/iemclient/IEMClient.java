@@ -77,17 +77,13 @@ public class IEMClient {
   /**
    * Used for testing your connection to the IEM API.
    * @param requestBody A data transfer object representing the XML request body.
-   * @throws OperationFailedException Thrown if the server response indicates operation failure.
    * @return An entity representing the response.
    */
   public GenericResponse checkToken(final CheckTokenRequest requestBody)
       throws OperationFailedException, ConnectionException, UnexpectedResponseCodeException {
     try {
       final Response response = webTarget.request().post(Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE), Response.class);
-      checkResponseCode(response, OK_RESPONSE);
-      final GenericResponse responseEntity = response.readEntity(GenericResponse.class);
-      checkStatusIsSuccess(responseEntity);
-      return responseEntity;
+      return response.readEntity(GenericResponse.class);
     } catch (InternalServerErrorException e) {
       throw new ConnectionException(e);
     }
@@ -97,7 +93,6 @@ public class IEMClient {
       throws UnexpectedResponseCodeException, OperationFailedException, ConnectionException, UnexpectedResponseBodyException {
     try {
       final Response response = webTarget.request().post(Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE), Response.class);
-      checkResponseCode(response, OK_RESPONSE);
       String responseString = response.readEntity(String.class);
       return fromXml(responseString, GetListsResponse.class);
     } catch (InternalServerErrorException e) {
@@ -112,7 +107,6 @@ public class IEMClient {
     try {
       Entity<GetSubscribersRequest> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
       final Response response = webTarget.request().post(entity, Response.class);
-      checkResponseCode(response, OK_RESPONSE);
       String responseString = response.readEntity(String.class);
       return fromXml(responseString, GetSubscribersResponse.class);
     } catch (InternalServerErrorException e) {
@@ -127,7 +121,6 @@ public class IEMClient {
     try {
       Entity<GetSubscribersCountRequest> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
       final Response response = webTarget.request().post(entity, Response.class);
-      checkResponseCode(response, OK_RESPONSE);
       String responseString = response.readEntity(String.class);
       return fromXml(responseString, GenericResponse.class);
     } catch (InternalServerErrorException e) {
@@ -142,43 +135,32 @@ public class IEMClient {
   public GenericResponse addSubscriberToList(final AddSubscriberRequest requestBody) throws UnexpectedResponseCodeException, OperationFailedException {
     Entity<AddSubscriberRequest> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
     final Response response = webTarget.request().post(entity, Response.class);
-    checkResponseCode(response, OK_RESPONSE);
-    final GenericResponse responseEntity = response.readEntity(GenericResponse.class);
-    checkStatusIsSuccess(responseEntity);
-    return responseEntity;
+    return response.readEntity(GenericResponse.class);
   }
 
   public GenericResponse deleteSubscriberFromList(final DeleteSubscriberRequest requestBody)
       throws UnexpectedResponseCodeException, OperationFailedException {
     Entity<DeleteSubscriberRequest> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
     final Response response = webTarget.request().post(entity, Response.class);
-    checkResponseCode(response, OK_RESPONSE);
-    final GenericResponse responseEntity = response.readEntity(GenericResponse.class);
-    checkStatusIsSuccess(responseEntity);
-    return responseEntity;
+    return response.readEntity(GenericResponse.class);
   }
 
   public GenericResponse isSubscriberOnList(final IsSubscriberOnListRequest requestBody) throws UnexpectedResponseCodeException, OperationFailedException {
     Entity<IsSubscriberOnListRequest> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
     final Response response = webTarget.request().post(entity, Response.class);
-    checkResponseCode(response, OK_RESPONSE);
     return response.readEntity(GenericResponse.class);
   }
 
   public GenericResponse suppressSubscriber(final AddBannedSubscriberRequest requestBody) throws UnexpectedResponseCodeException, OperationFailedException {
     Entity<AddBannedSubscriberRequest> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
     final Response response = webTarget.request().post(entity, Response.class);
-    checkResponseCode(response, OK_RESPONSE);
-    final GenericResponse responseEntity = response.readEntity(GenericResponse.class);
-    checkStatusIsSuccess(responseEntity);
-    return responseEntity;
+    return response.readEntity(GenericResponse.class);
   }
 
   // TODO: Create entity type for fetchStats response
   public String fetchStats(final FetchStatsRequest requestBody) throws UnexpectedResponseCodeException, OperationFailedException {
     Entity<FetchStatsRequest> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
     final Response response = webTarget.request().post(entity, Response.class);
-    checkResponseCode(response, OK_RESPONSE);
     return response.readEntity(String.class);
   }
 
@@ -189,36 +171,16 @@ public class IEMClient {
       throws OperationFailedException, UnexpectedResponseCodeException, JAXBException {
     Entity<ChangeSubscriberConfirmRequest> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
     final Response response = webTarget.request().post(entity, Response.class);
-    checkResponseCode(response, OK_RESPONSE);
-    final GenericResponse responseEntity = response.readEntity(GenericResponse.class);
-    checkStatusIsSuccess(responseEntity);
-    return responseEntity;
+    return response.readEntity(GenericResponse.class);
   }
 
   public GenericResponse saveSubscriberCustomField(final SaveSubscriberCustomFieldRequest requestBody)
       throws OperationFailedException, UnexpectedResponseCodeException, JAXBException {
     Entity<SaveSubscriberCustomFieldRequest> entity = Entity.entity(requestBody, MediaType.APPLICATION_XML_TYPE);
     final Response response = webTarget.request().post(entity, Response.class);
-    checkResponseCode(response, OK_RESPONSE);
-    final GenericResponse responseEntity = response.readEntity(GenericResponse.class);
-    checkStatusIsSuccess(responseEntity);
-    return responseEntity;
+    return response.readEntity(GenericResponse.class);
   }
 
-  private void checkStatusIsSuccess(final GenericResponse response) throws OperationFailedException {
-    final Status status = response.getStatus();
-    if(!status.equals(Status.SUCCESS)) {
-      throw new OperationFailedException(response.getErrorMessage(), response.getStatus());
-    }
-  }
 
-  private void checkResponseCode(final javax.ws.rs.core.Response response, final int[] expectedStatusArray) throws UnexpectedResponseCodeException {
-    final int actualStatus = response.getStatus();
-    for(int status : expectedStatusArray) {
-      if(status == actualStatus)
-        return;
-    }
-    throw new UnexpectedResponseCodeException(expectedStatusArray,actualStatus);
-  }
 
 }

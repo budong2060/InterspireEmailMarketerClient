@@ -76,9 +76,10 @@ public class IEMClientIT {
     client.checkToken(RequestCreationUtil.checkTokenRequest(apiUsername, apiToken));
   }
 
-  @Test(expected = OperationFailedException.class)
-  public void testCheckTokenWithWrongTokenThrowsOperationFailedException() throws Exception {
-    client.checkToken(RequestCreationUtil.checkTokenRequest(apiUsername, BAD_TOKEN));
+  @Test
+  public void testCheckTokenWithWrongTokenReturnsFailedResponse() throws Exception {
+    GenericResponse genericResponse = client.checkToken(RequestCreationUtil.checkTokenRequest(apiUsername, BAD_TOKEN));
+    assertEquals(Status.FAILED, genericResponse.getStatus());
   }
 
   @Test(expected = ConnectionException.class)
